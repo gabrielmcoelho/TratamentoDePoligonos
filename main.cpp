@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdlib>
 #include "poligono.h"
-#include "ponto.h"
 #include "retangulo.h"
 
 using namespace std;
@@ -54,11 +53,11 @@ int main()
             cin >> a >> b;
             if(RetCriado){
                 ret.translada(a, b);
-                cout << "Retangulo transladado em (+" << a << ",+" << b << ") com sucesso!" << endl;
+                cout << "Retangulo transladado em (" << a << "," << b << ") com sucesso!" << endl;
             }
             else{
                 polig.translada(a, b);
-                cout << "Poligono transladado em (+" << a << ",+" << b << ") com sucesso!" << endl;
+                cout << "Poligono transladado em (" << a << "," << b << ") com sucesso!" << endl;
             }
             break;
         case 4:
@@ -185,7 +184,7 @@ void CriarRet(){
     cin >> vx;
     cout << "coordenada y do vertice: ";
     cin >> vy;
-    cout << "Digite a altura e a largura do retangulo: ";
+    cout << "Digite a altura e a largura do retangulo: " << endl;
     cout << "Altura: ";
     cin >> altura;
     cout << "Largura: ";
