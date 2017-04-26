@@ -19,8 +19,8 @@ public:
     */
     Poligono();
     /** @brief Adiciona um vértice ao polígono
-    * @param x recebe a coordenada x do vértice a ser adicionado
-    * @param y recebe a coordenada y do vértice a ser adicionado
+    * @param x Coordenada x do vértice a ser adicionado
+    * @param y Coordenada y do vértice a ser adicionado
     */
     void adcVertice(float x, float y);
     /** @brief Serve para verificar se o polígono é convexo
@@ -35,14 +35,14 @@ public:
     */
     float areaPoligono(void);
     /** @brief Translada o polígono para uma nova posição
-    *   @param a recebe a distância que o poligono irá se mover no eixo x
-    *   @param b recebe a distância que o poligono irá se mover no eixo y
+    *   @param a Distância que o poligono irá se mover no eixo x
+    *   @param b Distância que o poligono irá se mover no eixo y
     */
     void translada(float a, float b);
     /** @brief Rotaciona o polígono em torno de um ponto
-    *   @param x_origem recebe a coordenada x do eixo de rotação do polígono
-    *   @param y_origem recebe a coordenada y do eixo de rotação do polígono
-    *   @param theta recebe o ângulo em graus que o polígono irá rotacionar
+    *   @param x_origem Coordenada x do eixo de rotação do polígono
+    *   @param y_origem Coordenada y do eixo de rotação do polígono
+    *   @param theta Ângulo, em graus, que o polígono irá rotacionar
     */
     void rotaciona(float x_origem, float y_origem, float theta);
     /** @brief Exibe os pontos que formam os vértices do polígono
