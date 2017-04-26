@@ -1,111 +1,141 @@
 #include "poligono.h"
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 using namespace std;
 
 Poligono::Poligono()
 {
-    // Construtor
+
 }
 
-Poligono::~Poligono()
+void Poligono::adcVertice(float x, float y)
 {
-    // Destrutor
-}
-
-void Poligono::adcVertice(float vx, float vy){
-    v[n].setXY(vx, vy);
+    vertices[n].setXY(x, y);
     n++;
-}
-
-int Poligono::getN(void){
-    return n;
-}
-
-void Poligono::resetPoligono(void){
-    n=0;
-}
-
-float Poligono::calcArea(void){
-    float soma2 = 0, soma1 = 0, area;
-    for(int i=0; i<n; i++){
-        if(i==(n-1)){
-            soma2 += v[n-1].getX()*v[0].getY();
-            soma1 += v[n-1].getY()*v[0].getX();
-        }
-        else{
-            soma2 += v[i].getX()*v[i+1].getY();
-            soma1 += v[i].getY()*v[i+1].getX();
-        }
-    }
-    if(soma2>soma1){
-        area = abs((soma2 - soma1)/2);
-    }
-    else{
-        area = abs((soma1 - soma2)/2);
-    }
-    return area;
-}
-
-void Poligono::translada(float a, float b)
-{
-    for(int i=0; i<n; i++){
-        v[i].translada(a, b);
-    }
-}
-
-void Poligono::rotaciona(float ang, float x_origem, float y_origem){
-    Ponto origem, aux;
-    float theta;
-    origem.setXY(x_origem, y_origem);
-    ang *= (M_PI/180);
-    for(int i=0; i<n; i++){
-        if(v[i].getX()!=x_origem||v[i].getY()!=y_origem){
-            aux = v[i].sub(origem);
-            theta = atan2(aux.getY(), aux.getX()) + ang;
-            v[i].setX(aux.norma()*cos(theta) + x_origem);
-            v[i].setY(aux.norma()*sin(theta) + y_origem);
-        }
-    }
-}
-
-void Poligono::imprime()
-{
-    for(int i=0; i<n; i++)
-    {
-        cout << "(" << v[i].getX() << "," << v[i].getY() << ") -> ";
-    }
-    cout << endl << endl;
 }
 
 bool Poligono::verifPoligono()
 {
     Ponto origem, t, u;
     float x;
-    for(int i=1;i<=n;i++) {
-        if(i<n-1){
-            origem.setXY(v[i].getX(), v[i].getY());
-            u=v[i-1].sub(origem);
-            t=v[i+1].sub(origem);
+
+    for(int i=1;i<=n;i++)
+    {
+        if(i<n-1)
+        {
+            origem.setXY(vertices[i].getX(), vertices[i].getY());
+            u=vertices[i-1].sub(origem);
+            t=vertices[i+1].sub(origem);
         }
-        else if(i==n-1){
-            origem.setXY(v[i].getX(), v[i].getY());
-            u=v[i-1].sub(origem);
-            t=v[0].sub(origem);
+        else
+        {
+            if(i==n-1)
+            {
+                origem.setXY(vertices[i].getX(), vertices[i].getY());
+                u=vertices[i-1].sub(origem);
+                t=vertices[0].sub(origem);
+            }
+            else
+            {
+                origem.setXY(vertices[0].getX(), vertices[0].getY());
+                u=vertices[n-1].sub(origem);
+                t=vertices[1].sub(origem);
+            }
         }
-        else{
-            origem.setXY(v[0].getX(), v[0].getY());
-            u=v[n-1].sub(origem);
-            t=v[1].sub(origem);
-        }
+
+        //Diferença de angulo entre dois vetore: /http://stackoverflow.com/questions/21483999/using-atan2-to-find-angle-between-two-vectors
         x=atan2(u.getY(), u.getX()) - atan2(t.getY(), t.getX());
-        if(x < 0){
+
+        //transformando angulos para o intervalo de 0 a 2pi
+        if(x < 0)
+        {
             x += 2*M_PI;
         }
-        if(x-M_PI>0.001) {
+
+        //Se o angulo interno for maior que 180 graus
+        if(x-M_PI>0.001)
+        {
             return false;
         }
     }
     return true;
+}
+
+int Poligono::nVertices()
+{
+    return(n);
+}
+
+float Poligono::areaPoligono()
+{
+    //http://pt.wikihow.com/Calcular-a-%C3%81rea-de-um-Pol%C3%ADgono
+    float xy=0, yx=0, s;
+    for(int i=0;i<n;i++)
+    {
+        if(i!=n-1)
+        {
+            xy+=vertices[i].getX()*vertices[i+1].getY();
+            yx+=vertices[i].getY()*vertices[i+1].getX();
+        }
+        else
+        {
+            xy+=vertices[i].getX()*vertices[0].getY();
+            yx+=vertices[i].getY()*vertices[0].getX();
+        }
+    }
+
+    if(xy>yx)
+    {
+        s=abs((xy-yx)/2);
+    }
+    else
+    {
+        s=abs((yx-xy)/2);
+    }
+    return(s);
+}
+
+void Poligono::translada(float a, float b)
+{
+    for(int i=0;i<n;i++)
+    {
+        vertices[i].translada(a, b);
+    }
+}
+
+//rotaciona em torno de um vertice
+void Poligono::rotaciona(float x_origem, float y_origem, float theta)
+{
+    float ang;
+    Ponto origem, p;
+    origem.setXY(x_origem, y_origem);
+    theta*=(M_PI/180);   //trasformando o angulo de graus p/ rad
+    for(int i=0;i<n;i++)
+    {
+        if(vertices[i].getX()!=x_origem||vertices[i].getY()!=y_origem)
+        {
+            p=vertices[i].sub(origem);
+            ang=atan2(p.getY(), p.getX()); //atan2 descobre o angulo em qualquer quadrante, atan não
+            ang+=theta;
+            vertices[i].setX(p.norma()*cos(ang) + x_origem);
+            vertices[i].setY(p.norma()*sin(ang) + y_origem);
+        }
+    }
+}
+
+void Poligono::imprime()
+{
+    for(int i=0;i<n;i++)
+    {
+        vertices[i].imprime();
+        if(i!=n-1)
+            cout << " -> ";
+    }
+    cout << endl << endl;
+}
+
+void Poligono::resetPoligono()
+{
+    n=0;
 }
