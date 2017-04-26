@@ -5,27 +5,26 @@
 
 using namespace std;
 
-Poligono polig;
-Retangulo ret;
-
 int Menu1();
 int Menu2();
-bool CriarPol();
-void CriarRet();
+bool CriarPol(Poligono &polig);
+void CriarRet(Poligono &polig, Retangulo &ret);
 
 int main()
 {
+    Poligono polig;
+    Retangulo ret;
     int opcao;
-    float a, b, ang, x_origem, y_origem;
+    float a, b, theta, x_origem, y_origem;
     bool PolCriado = false, RetCriado = false;
     while(PolCriado==false && RetCriado==false){
         opcao = Menu1();
         switch(opcao){
         case 1:
-            PolCriado = CriarPol();
+            PolCriado = CriarPol(polig);
             break;
         case 2:
-            CriarRet();
+            CriarRet(polig, ret);
             RetCriado = true;
             break;
         default:
@@ -38,19 +37,22 @@ int main()
         switch (opcao) {
         case 1:
             if(RetCriado)
-                cout << "Seu retangulo possui " << ret.getN() << " vertices" << endl;
+                cout << "Seu retangulo possui " << ret.nVertices() << " vertices" << endl;
             else
-                cout << "Seu poligono possui " << polig.getN() << " vertices" << endl;
+                cout << "Seu poligono possui " << polig.nVertices() << " vertices" << endl;
             break;
         case 2:
             if(RetCriado)
-                cout << "A area do seu retangulo eh " << ret.calcArea() << " u.a" << endl;
+                cout << "A area do seu retangulo eh " << ret.areaPoligono() << " u.a" << endl;
             else
-                cout << "A area do seu poligno eh " << polig.calcArea() << " u.a" << endl;
+                cout << "A area do seu poligno eh " << polig.areaPoligono() << " u.a" << endl;
             break;
         case 3:
-            cout << "Digite os valores de a e b: ";
-            cin >> a >> b;
+            cout << "Digite os valores de a e b: " << endl;
+            cout << "a: ";
+            cin >> a;
+            cout << "b: ";
+            cin >> b;
             if(RetCriado){
                 ret.translada(a, b);
                 cout << "Retangulo transladado em (" << a << "," << b << ") com sucesso!" << endl;
@@ -62,22 +64,22 @@ int main()
             break;
         case 4:
             cout << "Digite o angulo (entre 0 e 360 graus) a ser rotacionado: ";
-            cin >> ang;
-            while(ang<=0||ang>=360){
+            cin >> theta;
+            while(theta<=0||theta>=360){
                 cout << "Valor invalido, digite novamente: ";
-                cin >> ang;
+                cin >> theta;
             }
             cout << "Digite a coordenada x do ponto tomado como base: ";
             cin >> x_origem;
             cout << "Digite a coordenada y do ponto tomado como base: ";
             cin >> y_origem;
             if(RetCriado){
-                ret.rotaciona(ang, x_origem, y_origem);
-                cout << "Retangulo rotacionado em " << ang << " graus em torno do ponto (" << x_origem << "," << y_origem << ") com sucesso!";
+                ret.rotaciona(x_origem, y_origem, theta);
+                cout << "Retangulo rotacionado em " << theta << " graus em torno do ponto (" << x_origem << "," << y_origem << ") com sucesso!";
             }
             else{
-                polig.rotaciona(ang, x_origem, y_origem);
-                cout << "Poligono rotacionado em " << ang << " graus em torno do ponto (" << x_origem << "," << y_origem << ") com sucesso!";
+                polig.rotaciona(x_origem, y_origem, theta);
+                cout << "Poligono rotacionado em " << theta << " graus em torno do ponto (" << x_origem << "," << y_origem << ") com sucesso!";
             }
             break;
         case 5:
@@ -99,9 +101,9 @@ int Menu1(){
     cout << endl << endl;
     system("Pause");
     system("cls");
-    cout << "Bem-vindo ao tratamento de poligonos!" << endl << endl
-         << "1 - Criar poligono" << endl
-         << "2 - Criar retângulo" << endl
+    cout << "Bem-vindo ao tratamento de poligonos!              CRIADORES" << endl << endl
+         << "1 - Criar poligono                         Matheus Oliveira de Freitas" << endl
+         << "2 - Criar retangulo                        Gabriel Medeiros Coelho" << endl
          << "3 - Sair" << endl << endl
          << "O que deseja fazer?" << endl
          << "Digite aqui: ";
@@ -140,29 +142,29 @@ int Menu2(){
     return opcao;
 }
 
-bool CriarPol(){
+bool CriarPol(Poligono &polig){
     int i=2;
-    float vxi, vyi, vx, vy;
+    float xi, yi, x, y;
     polig.resetPoligono();
     cout << "=OBSERVACOES=" << endl
          << "Insira os vertices do poligono no sentido anti-horario" << endl
          << "Insira o vertice inicial novamente quando quiser finalizar o processo" << endl
          << "O poligono deve ter no minimo 3 e no maximo 100 vertices e deve ser convexo!" << endl << endl;
     cout << "Insira a coordenada x do vertice inicial: ";
-    cin >> vxi;
+    cin >> xi;
     cout << "Insira a coordenada y do vertice inicial: ";
-    cin >> vyi;
-    polig.adcVertice(vxi, vyi);
+    cin >> yi;
+    polig.adcVertice(xi, yi);
     while(i<=100){
         cout << endl << "~Vertice " << i << "~" << endl;
         cout << "Insira a coordenada x do vertice: ";
-        cin >> vx;
+        cin >> x;
         cout << "Insira a coordenada y do vertice: ";
-        cin >> vy;
-        if(vx==vxi && vy==vyi){
+        cin >> y;
+        if(x==xi && y==yi){
             break;
         }
-        polig.adcVertice(vx, vy);
+        polig.adcVertice(x, y);
         i++;
     }
     if(!polig.verifPoligono()||i<4)
@@ -176,19 +178,19 @@ bool CriarPol(){
     }
 }
 
-void CriarRet(){
-    float altura, largura, vx, vy;
+void CriarRet(Poligono &polig, Retangulo &ret){
+    float altura, largura, x, y;
     polig.resetPoligono();
     cout << "Digite o vertice superior esquerdo do retangulo: " << endl;
     cout << "coordenada x do vertice: ";
-    cin >> vx;
+    cin >> x;
     cout << "coordenada y do vertice: ";
-    cin >> vy;
+    cin >> y;
     cout << "Digite a altura e a largura do retangulo: " << endl;
     cout << "Altura: ";
     cin >> altura;
     cout << "Largura: ";
     cin >> largura;
-    ret(vx, vy, largura, altura);
+    ret(x, y, largura, altura);
     return;
 }
