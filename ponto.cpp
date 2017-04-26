@@ -6,28 +6,28 @@ using namespace std;
 
 Ponto::Ponto()
 {
-    // Construtor
+
 }
 
-Ponto::~Ponto()
+Ponto Ponto::soma(Ponto p1)
 {
-    // Destrutor
+    Ponto p2;
+    p2.x=x+p1.x;
+    p2.y=y+p1.y;
+    return(p2);
 }
 
-void Ponto::setX(float mx)
+Ponto Ponto::sub(Ponto p1)
 {
-    x = mx;
+    Ponto p2;
+    p2.x=x-p1.x;
+    p2.y=y-p1.y;
+    return(p2);
 }
 
-void Ponto::setY(float my)
+void Ponto::imprime(void)
 {
-    y = my;
-}
-
-void Ponto::setXY(float mx, float my)
-{
-    x = mx;
-    y = my;
+    cout << "(" << x << ", " << y << ")";
 }
 
 float Ponto::getX(void)
@@ -35,42 +35,36 @@ float Ponto::getX(void)
     return x;
 }
 
+void Ponto::setX(float x1)
+{
+    x=x1;
+}
+
 float Ponto::getY(void)
 {
     return y;
 }
 
-Ponto Ponto::add(Ponto p2)
+void Ponto::setY(float y1)
 {
-    Ponto p3;
-    p3.x = x + p2.x;
-    p3.y = y + p2.y;
-    return p3;
+    y=y1;
 }
 
-Ponto Ponto::sub(Ponto p2)
+void Ponto::setXY(float x1, float y1)
 {
-    Ponto p3;
-    p3.x = x - p2.x;
-    p3.y = y - p2.y;
-    return p3;
+    x=x1;
+    y=y1;
 }
 
-float Ponto::norma(void)
+float Ponto::norma()
 {
-    float norma;
-    norma = pow(x,2) + pow(y,2);
-    norma = sqrt(norma);
-    return norma;
+    float t;
+    t=sqrt(pow(x, 2)+pow(y, 2));
+    return(t);
 }
 
 void Ponto::translada(float a, float b)
 {
-    x = x+a;
-    y = y+b;
-}
-
-void Ponto::imprime(void)
-{
-    cout << "(" << x << "," << y << ")";
+    x+=a;
+    y+=b;
 }
